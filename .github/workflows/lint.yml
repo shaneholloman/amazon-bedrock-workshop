@@ -40,7 +40,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/ruff-action@v1
         with:
-          args: "check tutor/"
+          args: "check"
+          src: "tutor/"
 
   notebook-output-check:
     name: Verify Notebooks Are Clean
@@ -54,10 +55,10 @@ jobs:
       - name: Check notebooks have no outputs
         run: |
           DIRTY=0
-          for nb in $(find . -name "*.ipynb" -not -path "./.ipynb_checkpoints/*" -not -path "./node_modules/*"); do
+          while IFS= read -r -d '' nb; do
             if python -c "
           import json, sys
-          with open('$nb') as f:
+          with open(sys.argv[1]) as f:
               nb_data = json.load(f)
           for cell in nb_data.get('cells', []):
               if cell.get('cell_type') == 'code':
@@ -65,13 +66,13 @@ jobs:
                       sys.exit(1)
                   if cell.get('execution_count') is not None:
                       sys.exit(1)
-          " 2>/dev/null; then
+          " "$nb" 2>/dev/null; then
               echo "✅ $nb - clean"
             else
               echo "❌ $nb - has outputs or execution counts"
               DIRTY=1
             fi
-          done
+          done < <(find . -name "*.ipynb" -not -path "./.ipynb_checkpoints/*" -not -path "./node_modules/*" -print0)
           if [ $DIRTY -eq 1 ]; then
             echo ""
             echo "::error::Some notebooks contain outputs. Run 'nbstripout' before committing."
