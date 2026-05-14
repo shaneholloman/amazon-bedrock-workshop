@@ -18,6 +18,10 @@ reported the issue. Please try to include as much information as you can. Detail
 * Any modifications you've made relevant to the bug
 * Anything unusual about your environment or deployment
 
+## Development Setup
+
+Before your first contribution, follow the [Developer Setup Guide](SETUP.md) to configure pre-commit hooks and notebook output stripping. Without this setup, notebook outputs will silently slip into your commits with no error or warning.
+
 ## Contributing via Pull Requests
 
 Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
