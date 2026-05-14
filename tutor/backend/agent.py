@@ -1,11 +1,12 @@
 """
 Bedrock tutor agent - FastAPI version
 """
-from typing import AsyncIterator, Optional, List, Dict, Any
+from typing import Any, AsyncIterator, Dict, List, Optional
+
+import tools
 from strands import Agent
 from strands.models import BedrockModel
 from strands.types.content import Message
-import tools
 
 
 def create_tutor_agent(

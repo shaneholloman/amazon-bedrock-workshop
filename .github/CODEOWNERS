@@ -1,0 +1,16 @@
+# Default owner for everything in the repo
+* @jld23
+
+# Workshop content (Markdown)
+*.md @jld23
+
+# Jupyter notebooks
+*.ipynb @jld23
+
+# Infrastructure / CloudFormation
+*.yaml @jld23
+*.yml @jld23
+*.json @jld23
+
+# Python code
+*.py @jld23

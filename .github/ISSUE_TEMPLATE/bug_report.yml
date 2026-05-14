@@ -1,0 +1,74 @@
+name: Bug Report
+description: Report a broken lab, incorrect content, or technical issue
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting an issue! Please fill out the details below.
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Workshop Module
+      description: Which module/lab is affected?
+      options:
+        - "01 - Text Generation"
+        - "02 - Knowledge Bases and RAG"
+        - "03 - Model Customization"
+        - "04 - Agents"
+        - "05 - Distributed Inference Engine"
+        - "Other (specify below)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What went wrong?
+      placeholder: "Describe the issue..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Open notebook X
+        2. Run cell Y
+        3. See error...
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Message
+      description: Paste any error messages or tracebacks
+      render: shell
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - "Workshop Studio (AWS event)"
+        - "Self-paced (own AWS account)"
+        - "SageMaker Studio"
+        - "Local environment"
+    validations:
+      required: true
+
+  - type: input
+    id: region
+    attributes:
+      label: AWS Region
+      placeholder: "e.g., us-east-1"
+
+  - type: input
+    id: kernel
+    attributes:
+      label: SageMaker Kernel / Python Version
+      placeholder: "e.g., conda_python3, Python 3.11"

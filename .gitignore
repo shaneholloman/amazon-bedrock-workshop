@@ -1,4 +1,5 @@
 # OS and temporary files:
+*.ipynb_checkpoints/
 __pycache__
 .ipynb_checkpoints
 .venv
@@ -9,5 +10,12 @@ __pycache__
 /dependencies
 data/
 
-.idea
+.idea/
 AWSCLIV2.pkg
+
+# Virtual environments
+venv/
+env/
+
+# nbstripout is handled via .gitattributes filter
+CLAUDE.md

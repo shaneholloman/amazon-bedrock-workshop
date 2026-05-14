@@ -1,18 +1,17 @@
 """
 FastAPI backend for Bedrock Tutor
 """
-import asyncio
 import json
-from typing import List, Dict, Any, Optional
 from pathlib import Path
-
-from fastapi import FastAPI, WebSocket
-from fastapi.responses import StreamingResponse, FileResponse
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from typing import List, Optional
 
 # Import agent logic
 import agent
+from fastapi import FastAPI, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+
 TUTOR_DIR = Path(__file__).parent.parent.parent / "tutor"
 
 app = FastAPI(title="Bedrock Tutor API")

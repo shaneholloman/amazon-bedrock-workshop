@@ -11,29 +11,29 @@ Within this series of labs, you'll explore the most common usage patterns for Ge
 ## Labs
 
 - **01 - Text Generation** \[~25 mins\]
-    - Converse API and Invoke Model API
-    - Summarization, code generation, function calling
-    - Multi-turn conversations and streaming
-    - Cross-regional inference profiles
+  - Converse API and Invoke Model API
+  - Summarization, code generation, function calling
+  - Multi-turn conversations and streaming
+  - Cross-regional inference profiles
 
 - **02 - Knowledge Bases and RAG** \[~35 mins\]
-    - Create a Knowledge Base with OpenSearch Serverless
-    - RetrieveAndGenerate API (managed RAG)
-    - Retrieve API (custom RAG pipeline)
+  - Create a Knowledge Base with OpenSearch Serverless
+  - RetrieveAndGenerate API (managed RAG)
+  - Retrieve API (custom RAG pipeline)
 
 - **03 - Model Customization** \[~30 mins — own account only, not available on Workshop Studio\]
-    - Fine-tuning, continued pre-training, distillation
-    - Reinforcement fine-tuning
+  - Fine-tuning, continued pre-training, distillation
+  - Reinforcement fine-tuning
 
 - **04 - Agents** \[~30 mins\]
-    - Restaurant booking assistant using Strands Agents framework
-    - Tool use with DynamoDB and Knowledge Bases
-    - Deployment to Amazon Bedrock AgentCore Runtime
+  - Restaurant booking assistant using Strands Agents framework
+  - Tool use with DynamoDB and Knowledge Bases
+  - Deployment to Amazon Bedrock AgentCore Runtime
 
 - **05 - Distributed Inference Engine** \[~20 mins\]
-    - OpenAI-compatible endpoint for open-weight models
-    - Chat Completions and Responses API
-    - Stateful conversations, tool use, structured output
+  - OpenAI-compatible endpoint for open-weight models
+  - Chat Completions and Responses API
+  - Stateful conversations, tool use, structured output
 
 ## Getting started
 
