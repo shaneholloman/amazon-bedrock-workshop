@@ -21,7 +21,6 @@ from opensearchpy import (
 )
 import pprint
 from retrying import retry
-import random
 import yaml
 import os
 import argparse
@@ -75,7 +74,7 @@ class KnowledgeBasesForAmazonBedrock:
         """
         Class initializer
         """
-        boto3_session = boto3.session.Session()
+        boto3_session = boto3.Session()
         self.region_name = boto3_session.region_name
         self.iam_client = boto3_session.client("iam", region_name=self.region_name)
         self.account_number = (

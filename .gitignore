@@ -1,6 +1,7 @@
 # OS and temporary files:
 __pycache__
 .ipynb_checkpoints
+.env
 .venv
 .DS_Store
 .idea
@@ -9,5 +10,4 @@ __pycache__
 /dependencies
 data/
 
-.idea
 AWSCLIV2.pkg
