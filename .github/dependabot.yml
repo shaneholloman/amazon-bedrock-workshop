@@ -22,9 +22,9 @@ updates:
           - "aws-*"
           - "sagemaker*"
 
-  # Python dependencies - Knowledge Bases and RAG
+  # Python dependencies - Main workshop
   - package-ecosystem: "pip"
-    directory: "/02_Knowledge_Bases_and_RAG"
+    directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
@@ -35,7 +35,7 @@ updates:
     commit-message:
       prefix: "chore(deps):"
 
-  # Python dependencies - Agents
+  # Python dependencies - Agents sparate requirements.txt
   - package-ecosystem: "pip"
     directory: "/04_Agents"
     schedule:
