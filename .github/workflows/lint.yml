@@ -38,10 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/ruff-action@v1
+      - uses: astral-sh/ruff-action@v3
         with:
-          args: "check"
-          src: "tutor/"
+          version: 0.15.16
 
   notebook-output-check:
     name: Verify Notebooks Are Clean

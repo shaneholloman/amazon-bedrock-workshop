@@ -130,7 +130,7 @@ for i, result in enumerate(results, 1):
     score = result.get('score', 0)
     content = result.get('content', {}).get('text', '')
     location = result.get('location', {}).get('s3Location', {}).get('uri', 'N/A')
-    
+
     print(f"{i}. Score: {score:.4f}")
     print(f"   Source: {location}")
     print(f"   Preview: {content[:200]}...")
@@ -261,7 +261,7 @@ for event in stream_response['stream']:
             text = chunk['bytes'].decode('utf-8')
             print(text, end='', flush=True)
             full_answer += text
-    
+
     elif 'citations' in event:
         citations = event['citations']
 

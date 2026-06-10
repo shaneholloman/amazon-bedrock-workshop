@@ -1,6 +1,7 @@
 """
 FastAPI backend for Bedrock Tutor
 """
+
 import json
 from pathlib import Path
 from typing import List, Optional
@@ -28,10 +29,12 @@ app.add_middleware(
 # Serve frontend
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 
+
 @app.get("/")
 async def root():
     """Serve the main HTML page"""
     return FileResponse(FRONTEND_DIR / "index.html")
+
 
 @app.get("/static/{path:path}")
 async def serve_static(path: str):
@@ -73,8 +76,7 @@ async def websocket_chat(websocket: WebSocket):
 
         # Convert history to format expected by tutor_agent
         conversation_history = [
-            {"role": msg["role"], "content": msg["content"]}
-            for msg in history
+            {"role": msg["role"], "content": msg["content"]} for msg in history
         ]
 
         # Add action count context to message if it's high (max 3 actions before test required)
@@ -83,6 +85,7 @@ async def websocket_chat(websocket: WebSocket):
 
         # Get region
         import os
+
         region = os.getenv("AWS_REGION", "us-east-1")
         if not region or region == "us-east-1":
             try:
@@ -99,6 +102,7 @@ async def websocket_chat(websocket: WebSocket):
         learning_path_content = None
         if learning_path_id:
             import yaml
+
             learning_paths_dir = TUTOR_DIR / "learning_paths"
             if learning_paths_dir.exists():
                 for md_file in learning_paths_dir.glob("*.md"):
@@ -107,7 +111,7 @@ async def websocket_chat(websocket: WebSocket):
                         parts = content.split("---", 2)
                         if len(parts) >= 3:
                             frontmatter = yaml.safe_load(parts[1])
-                            if frontmatter.get('id') == learning_path_id:
+                            if frontmatter.get("id") == learning_path_id:
                                 learning_path_content = f"# LEARNING PATH: {frontmatter['title']}\n\n{parts[2].strip()}"
                                 break
 
@@ -116,7 +120,7 @@ async def websocket_chat(websocket: WebSocket):
             prompt=message,
             conversation_history=conversation_history,
             region=region,
-            learning_path_content=learning_path_content
+            learning_path_content=learning_path_content,
         ):
             await websocket.send_json(event)
 
@@ -125,10 +129,7 @@ async def websocket_chat(websocket: WebSocket):
 
     except Exception as e:
         # Send error event
-        await websocket.send_json({
-            "type": "error",
-            "message": str(e)
-        })
+        await websocket.send_json({"type": "error", "message": str(e)})
 
     finally:
         await websocket.close()
@@ -163,7 +164,7 @@ async def execute_code(request: ExecuteRequest):
             "success": True,
             "output": full_output,
             "code": request.code,
-            "has_error": bool(err)
+            "has_error": bool(err),
         }
     except Exception as e:
         error_output = f"Error: {type(e).__name__}: {str(e)}"
@@ -171,7 +172,7 @@ async def execute_code(request: ExecuteRequest):
             "success": False,
             "output": error_output,
             "code": request.code,
-            "has_error": True
+            "has_error": True,
         }
     finally:
         sys.stdout = old_stdout
@@ -182,6 +183,7 @@ async def execute_code(request: ExecuteRequest):
 async def list_learning_paths():
     """Get all available learning paths"""
     import yaml
+
     paths = []
     learning_paths_dir = TUTOR_DIR / "learning_paths"
     if learning_paths_dir.exists():
@@ -192,11 +194,13 @@ async def list_learning_paths():
                     parts = content.split("---", 2)
                     if len(parts) >= 3:
                         frontmatter = yaml.safe_load(parts[1])
-                        paths.append({
-                            "id": frontmatter['id'],
-                            "title": frontmatter['title'],
-                            "description": frontmatter['description']
-                        })
+                        paths.append(
+                            {
+                                "id": frontmatter["id"],
+                                "title": frontmatter["title"],
+                                "description": frontmatter["description"],
+                            }
+                        )
             except Exception:
                 pass
     return paths
@@ -204,4 +208,5 @@ async def list_learning_paths():
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8003)

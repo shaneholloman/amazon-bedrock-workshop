@@ -11,6 +11,12 @@ dependencies = [
     "requests>=2.34.2",
 ]
 
+[dependency-groups]
+dev = [
+    # Try to keep ruff version synced with .pre-commit-config.yaml and .github/workflows/lint.yml
+    "ruff>=0.15.16,<0.16",
+]
+
 [project.optional-dependencies]
 lab2 = [
     "opensearch-py>=3.2.0",
@@ -40,6 +46,45 @@ lab4 = [
     "retrying>=1.4.2",
     "strands-agents>=1.42.0",
     "strands-agents-tools>=0.8.0",
+]
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "03_Model_customization",  # (Currently imported from another sample repo without our linting)
+    "buck-out",
+    "build",
+    "dist",
+    "env",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = [
+    "E501",  # Line length — not enforced for workshop code
 ]
 
 [tool.setuptools]

@@ -223,12 +223,12 @@ messages = [
 
 def chat(user_message):
     messages.append({"role": "user", "content": user_message})
-    
+
     response = client.chat.completions.create(
         model=model_id,
         messages=messages
     )
-    
+
     assistant_reply = response.choices[0].message.content
     messages.append({"role": "assistant", "content": assistant_reply})
     return assistant_reply
@@ -411,20 +411,20 @@ messages = [{"role": "system", "content": "You are a helpful AWS expert."}]
 def stream_chat(user_input):
     """Stream a response and update conversation history."""
     messages.append({"role": "user", "content": user_input})
-    
+
     stream = client.chat.completions.create(
         model=model_id,
         messages=messages,
         stream=True
     )
-    
+
     full_response = ""
     for chunk in stream:
         if chunk.choices[0].delta.content:
             content = chunk.choices[0].delta.content
             print(content, end="", flush=True)
             full_response += content
-    
+
     messages.append({"role": "assistant", "content": full_response})
     print("\n")
 

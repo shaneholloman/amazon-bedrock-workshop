@@ -1,6 +1,7 @@
 """
 Bedrock tutor tools - FastAPI version (no Streamlit dependency)
 """
+
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -63,10 +64,7 @@ def give_user_task(task_description: str, hint: str = None) -> str:
 
 @tool
 def ask_multiple_choice(
-    question: str,
-    options: List[str],
-    correct_answer: str,
-    explanation: str = None
+    question: str, options: List[str], correct_answer: str, explanation: str = None
 ) -> str:
     """
     Ask the user a multiple choice question to test their knowledge.
@@ -94,9 +92,7 @@ def ask_multiple_choice(
 
 @tool
 def update_learning_progress(
-    path_id: str,
-    steps_completed: List[str],
-    total_steps: int
+    path_id: str, steps_completed: List[str], total_steps: int
 ) -> str:
     """
     Update the visual progress indicator for a learning path.
@@ -110,7 +106,9 @@ def update_learning_progress(
     Returns:
         Confirmation of progress update
     """
-    progress_pct = int((len(steps_completed) / total_steps) * 100) if total_steps > 0 else 0
+    progress_pct = (
+        int((len(steps_completed) / total_steps) * 100) if total_steps > 0 else 0
+    )
     return f"✓ Progress updated: {len(steps_completed)}/{total_steps} steps completed ({progress_pct}%)"
 
 
@@ -129,7 +127,9 @@ def read_scratchpad() -> str:
     """
     # Note: In a real implementation, this would retrieve code from session state
     # For now, agent should ask user to share code if needed
-    return "Note: To see your code, please share it in chat or describe what you changed."
+    return (
+        "Note: To see your code, please share it in chat or describe what you changed."
+    )
 
 
 @tool
@@ -148,17 +148,22 @@ def find_learning_paths(query: str) -> List[Dict[str, str]]:
     matches = []
 
     for path_id, path_data in learning_paths.items():
-        keywords = [k.lower() for k in path_data.get('keywords', [])]
-        title = path_data.get('title', '').lower()
-        description = path_data.get('description', '').lower()
+        keywords = [k.lower() for k in path_data.get("keywords", [])]
+        title = path_data.get("title", "").lower()
+        description = path_data.get("description", "").lower()
 
-        if (query_lower in title or query_lower in description or
-            any(query_lower in kw or kw in query_lower for kw in keywords)):
-            matches.append({
-                'id': path_id,
-                'title': path_data['title'],
-                'description': path_data['description']
-            })
+        if (
+            query_lower in title
+            or query_lower in description
+            or any(query_lower in kw or kw in query_lower for kw in keywords)
+        ):
+            matches.append(
+                {
+                    "id": path_id,
+                    "title": path_data["title"],
+                    "description": path_data["description"],
+                }
+            )
 
     return matches
 
@@ -179,10 +184,10 @@ def load_learning_path(path_id: str) -> Dict[str, Any]:
     if path_id in learning_paths:
         path_data = learning_paths[path_id]
         return {
-            'id': path_id,
-            'title': path_data['title'],
-            'description': path_data['description'],
-            'content': path_data['content'][:5000]
+            "id": path_id,
+            "title": path_data["title"],
+            "description": path_data["description"],
+            "content": path_data["content"][:5000],
         }
     else:
         return {"error": f"Learning path '{path_id}' not found"}
@@ -191,7 +196,9 @@ def load_learning_path(path_id: str) -> Dict[str, Any]:
 def _load_learning_paths():
     """Helper to load learning paths from markdown files"""
     learning_paths = {}
-    learning_paths_dir = Path(__file__).parent.parent.parent / "tutor" / "learning_paths"
+    learning_paths_dir = (
+        Path(__file__).parent.parent.parent / "tutor" / "learning_paths"
+    )
 
     if learning_paths_dir.exists():
         for md_file in learning_paths_dir.glob("*.md"):
@@ -201,9 +208,9 @@ def _load_learning_paths():
                     parts = content.split("---", 2)
                     if len(parts) >= 3:
                         frontmatter = yaml.safe_load(parts[1])
-                        learning_paths[frontmatter['id']] = {
+                        learning_paths[frontmatter["id"]] = {
                             **frontmatter,
-                            'content': parts[2].strip()
+                            "content": parts[2].strip(),
                         }
             except Exception:
                 pass
