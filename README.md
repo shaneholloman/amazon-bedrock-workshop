@@ -68,6 +68,8 @@ Amazon Bedrock now [automatically enables access](https://aws.amazon.com/blogs/s
 
 [![Star History Chart](https://api.star-history.com/svg?repos=aws-samples/amazon-bedrock-workshop&type=Date)](https://star-history.com/#aws-samples/amazon-bedrock-workshop&Date)
 
-# Contributors
+## Contributors
+
+We welcome community contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 [![contributors](https://contrib.rocks/image?repo=aws-samples/amazon-bedrock-workshop&max=2000)](https://github.com/aws-samples/amazon-bedrock-workshop/graphs/contributors)
