@@ -1,0 +1,98 @@
+name: Notebook Smoke Test
+
+on:
+  schedule:
+    - cron: "0 10 * * 1"  # Every Monday at 10am UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  smoke-test:
+    name: Verify Notebooks Import Successfully
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install base dependencies
+        run: |
+          pip install --quiet boto3 botocore nbformat ipykernel
+
+      - name: Install lab dependencies
+        run: |
+          for req in $(find . -name "requirements.txt" -not -path "*/venv/*"); do
+            echo "Installing from $req"
+            pip install --quiet -r "$req" || true
+          done
+
+      - name: Run import smoke test
+        id: smoke
+        run: |
+          FAILED=0
+          REPORT=""
+
+          for nb in $(find . -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" -not -path "*/venv/*" -not -path "*/node_modules/*"); do
+            # Extract imports from code cells and check they resolve
+            RESULT=$(python -c "
+          import json, importlib, sys
+
+          with open('$nb') as f:
+              data = json.load(f)
+
+          errors = []
+          for cell in data.get('cells', []):
+              if cell.get('cell_type') != 'code':
+                  continue
+              source = ''.join(cell.get('source', []))
+              for line in source.split('\n'):
+                  line = line.strip()
+                  if line.startswith('import ') or line.startswith('from '):
+                      # Extract module name
+                      if line.startswith('from '):
+                          mod = line.split()[1].split('.')[0]
+                      else:
+                          mod = line.split()[1].split('.')[0].rstrip(',')
+                      # Skip relative imports and known runtime-only modules
+                      if mod.startswith('.') or mod in ('IPython', 'sagemaker', 'opensearchpy'):
+                          continue
+                      try:
+                          importlib.import_module(mod)
+                      except ImportError as e:
+                          errors.append(f'  {mod}: {e}')
+
+          if errors:
+              print('\n'.join(errors))
+              sys.exit(1)
+          " 2>&1) || {
+              echo "❌ $nb"
+              echo "$RESULT" | head -5
+              REPORT="$REPORT\n❌ $nb\n$RESULT\n"
+              FAILED=1
+            }
+          done
+
+          if [ $FAILED -eq 1 ]; then
+            echo "## Notebook Smoke Test Failures" > smoke-report.md
+            echo "" >> smoke-report.md
+            echo "The following notebooks have unresolvable imports:" >> smoke-report.md
+            echo "" >> smoke-report.md
+            echo -e "$REPORT" >> smoke-report.md
+            echo "" >> smoke-report.md
+            echo "Run \`pip install <missing-package>\` or update the relevant \`requirements.txt\`." >> smoke-report.md
+            exit 1
+          fi
+
+          echo "All notebooks pass import checks."
+
+      - name: Create or update issue on failure
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Notebook Smoke Test: Import failures detected"
+          content-filepath: ./smoke-report.md
+          labels: bug,automated
+          update-existing: true

@@ -1,10 +1,11 @@
 """
 Bedrock tutor tools - FastAPI version (no Streamlit dependency)
 """
-from strands import tool
-from typing import List, Dict, Any
 from pathlib import Path
+from typing import Any, Dict, List
+
 import yaml
+from strands import tool
 
 
 @tool
@@ -56,8 +57,8 @@ def give_user_task(task_description: str, hint: str = None) -> str:
         Confirmation that task was presented
     """
     if hint:
-        return f"✓ Task presented to user with hint"
-    return f"✓ Task presented to user"
+        return "✓ Task presented to user with hint"
+    return "✓ Task presented to user"
 
 
 @tool

@@ -1,0 +1,4 @@
+ignores:
+  - "node_modules/**"
+  - "**/venv/**"
+  - "03_Model_customization/**"

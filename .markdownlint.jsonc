@@ -1,0 +1,30 @@
+{
+  // Markdownlint configuration for workshop content
+  "default": true,
+
+  // Allow long lines (workshop content often has long URLs/commands)
+  "MD013": false,
+
+  // Allow duplicate headings in different sections
+  "MD024": {
+    "siblings_only": true
+  },
+
+  // Allow inline HTML (used in workshop studio content)
+  "MD033": false,
+
+  // Allow bare URLs (common in workshop instructions)
+  "MD034": false,
+
+  // Allow multiple top-level headings (some modules have this)
+  "MD025": false,
+
+  // Don't require first line to be a top-level heading
+  "MD041": false,
+
+  // Allow fenced code blocks without language specifier
+  "MD040": false,
+
+  // Don't enforce table column spacing style
+  "MD060": false
+}

@@ -28,14 +28,18 @@ This folder contains a comprehensive workshop notebook that walks through all th
 
 1. Clone this repository and navigate to the `distributed-inference-engine` folder
 2. Install dependencies:
+
    ```bash
    pip install openai requests boto3 aws-bedrock-token-generator
    ```
+
 3. Set your environment variables:
+
    ```bash
    export OPENAI_BASE_URL="https://bedrock-mantle.us-east-1.api.aws/v1"
    export OPENAI_API_KEY="your-bedrock-api-key-here"
    ```
+
 4. Open the notebook and follow the sections sequentially
 
 ## Estimated Time

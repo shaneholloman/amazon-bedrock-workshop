@@ -32,14 +32,17 @@ This learning path teaches how to build Retrieval-Augmented Generation (RAG) sys
 ## Teaching Flow
 
 ### Step 1: Understanding the RetrieveAndGenerate API
+
 **Goal:** Use the simplest RAG API to query a knowledge base
 
 **What to show:**
+
 - The RetrieveAndGenerate API combines retrieval + generation in one call
 - Requires a Knowledge Base ID (created in Bedrock console)
 - Returns generated answer with source citations
 
 **Code pattern:**
+
 ```python
 import boto3
 import json
@@ -73,17 +76,20 @@ for i, citation in enumerate(citations, 1):
 ```
 
 **Key points to emphasize:**
+
 - RetrieveAndGenerate is the easiest RAG API - one call does everything
 - Automatically retrieves relevant chunks and generates an answer
 - Returns citations showing which sources were used
 - Knowledge Base must exist before using this API
 
 **Prerequisites:**
+
 - Create a Knowledge Base in Bedrock console (S3 data source)
 - Note the Knowledge Base ID
 - Wait for data source sync to complete
 
 **Common pitfalls:**
+
 - Using a Knowledge Base that hasn't finished syncing
 - Not handling empty citations (no relevant docs found)
 - Forgetting to use the full model ARN (not just model ID)
@@ -91,14 +97,17 @@ for i, citation in enumerate(citations, 1):
 ---
 
 ### Step 2: Separate Retrieval for Fine Control
+
 **Goal:** Use the Retrieve API separately to inspect retrieved documents
 
 **What to show:**
+
 - Retrieve API gives you the raw retrieved chunks
 - Inspect what documents were found before generation
 - Useful for debugging, filtering, or custom ranking
 
 **Code pattern:**
+
 ```python
 # Retrieve documents only (no generation)
 retrieve_response = client.retrieve(
@@ -129,6 +138,7 @@ for i, result in enumerate(results, 1):
 ```
 
 **Key points to emphasize:**
+
 - Retrieve API only gets documents, doesn't generate answers
 - Returns relevance scores for each chunk
 - Use this when you want to:
@@ -138,6 +148,7 @@ for i, result in enumerate(results, 1):
   - Debug why certain answers are produced
 
 **Best practices:**
+
 - Start with 5-10 results for most queries
 - Check relevance scores - low scores may indicate poor matches
 - Use numberOfResults to balance quality vs context length
@@ -145,14 +156,17 @@ for i, result in enumerate(results, 1):
 ---
 
 ### Step 3: Adding Filters and Metadata
+
 **Goal:** Use metadata filters to scope retrieval to specific documents
 
 **What to show:**
+
 - Add metadata when indexing documents (e.g., department, date, category)
 - Filter retrieval by metadata at query time
 - Combine semantic search with structured filters
 
 **Code pattern:**
+
 ```python
 # Retrieve with metadata filter
 filtered_response = client.retrieve(
@@ -193,12 +207,14 @@ complex_filter = {
 ```
 
 **Key points to emphasize:**
+
 - Metadata is set when creating the Knowledge Base data source
 - Filters narrow search to specific subsets of documents
 - Combine semantic search (embeddings) with structured filters (metadata)
 - Filter types: equals, notEquals, greaterThan, lessThan, in, notIn, and, or, not
 
 **Use cases:**
+
 - Multi-tenant systems (filter by customer_id)
 - Time-based retrieval (only recent documents)
 - Department-specific knowledge (filter by department)
@@ -207,14 +223,17 @@ complex_filter = {
 ---
 
 ### Step 4: Streaming RAG Responses
+
 **Goal:** Stream generated answers for better UX
 
 **What to show:**
+
 - Use retrieve_and_generate_stream for progressive display
 - Handle streaming events to show partial answers
 - Maintain citations in streamed responses
 
 **Code pattern:**
+
 ```python
 # Stream RAG response
 stream_response = client.retrieve_and_generate_stream(
@@ -253,12 +272,14 @@ for citation in citations:
 ```
 
 **Key points to emphasize:**
+
 - Streaming shows partial answers as they're generated (better UX)
 - Events arrive in chunks - decode and display progressively
 - Citations come at the end of the stream
 - Use this for chatbots and interactive applications
 
 **Best practices:**
+
 - Always flush output when streaming to display immediately
 - Handle streaming events gracefully (check event types)
 - Display citations after full answer is complete
@@ -266,14 +287,17 @@ for citation in citations:
 ---
 
 ### Step 5: Guardrails with RAG
+
 **Goal:** Add content safety and quality filters to RAG responses
 
 **What to show:**
+
 - Configure Guardrails to filter harmful content
 - Validate RAG answers meet quality standards
 - Handle guardrail interventions gracefully
 
 **Code pattern:**
+
 ```python
 # RAG with guardrails
 response = client.retrieve_and_generate(
@@ -308,12 +332,14 @@ print(response['output']['text'])
 ```
 
 **Key points to emphasize:**
+
 - Guardrails filter harmful content, PII, hallucinations
 - Create guardrails in Bedrock console
 - BLOCKED = response stopped, INTERVENED = modified
 - Use guardrails for: content safety, regulatory compliance, quality control
 
 **Use cases:**
+
 - Filter PII from customer support responses
 - Block harmful or inappropriate content
 - Ensure answers stay on-topic
@@ -324,6 +350,7 @@ print(response['output']['text'])
 ## Summary
 
 By the end of this path, learners should be able to:
+
 - Use RetrieveAndGenerate for simple RAG queries
 - Retrieve documents separately for inspection and custom logic
 - Filter retrieval with metadata for scoped search
@@ -331,6 +358,7 @@ By the end of this path, learners should be able to:
 - Add guardrails for content safety and quality
 
 ## Next Steps
+
 - Create custom chunking strategies in Knowledge Bases
 - Implement hybrid search (semantic + keyword)
 - Build conversation history into RAG queries
@@ -339,25 +367,30 @@ By the end of this path, learners should be able to:
 ## Technical Notes
 
 **APIs Used:**
+
 - `bedrock-agent-runtime.retrieve` - Get relevant documents only
 - `bedrock-agent-runtime.retrieve_and_generate` - Retrieve + generate in one call
 - `bedrock-agent-runtime.retrieve_and_generate_stream` - Streaming RAG
 
 **Prerequisites:**
+
 - Knowledge Base created in Bedrock console
 - Data source (S3, Web Crawler, etc.) synced
 - Knowledge Base ID noted
 
 **Supported Models:**
+
 - Any Claude model (Sonnet, Haiku, Opus)
 - Use full ARN format: `arn:aws:bedrock:REGION::foundation-model/MODEL_ID`
 
 **Retrieval Configuration:**
+
 - numberOfResults: 1-100 (default: 5)
 - Metadata filters: equals, in, greaterThan, etc.
 - Vector search is automatic (embeddings handled by KB)
 
 **Cost Considerations:**
+
 - Charged per retrieval query + generation tokens
 - More numberOfResults = more context = higher cost
 - Streaming has same cost as non-streaming
