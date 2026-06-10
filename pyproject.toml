@@ -47,6 +47,9 @@ lab4 = [
     "strands-agents>=1.42.0",
     "strands-agents-tools>=0.8.0",
 ]
+all = [
+    "amazon-bedrock-workshop[lab2,lab3,lab4]",
+]
 
 [tool.ruff]
 exclude = [

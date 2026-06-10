@@ -149,6 +149,30 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+all = [
+    { name = "bedrock-agentcore" },
+    { name = "bedrock-agentcore-starter-toolkit" },
+    { name = "bert-score" },
+    { name = "datasets" },
+    { name = "fmeval" },
+    { name = "ipywidgets" },
+    { name = "jsonlines" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "opensearch-py" },
+    { name = "pandas" },
+    { name = "pillow" },
+    { name = "py7zr" },
+    { name = "pypdf" },
+    { name = "requests-aws4auth" },
+    { name = "retrying" },
+    { name = "seaborn" },
+    { name = "strands-agents" },
+    { name = "strands-agents-tools" },
+    { name = "tokenizers" },
+    { name = "tqdm" },
+    { name = "urllib3" },
+]
 lab2 = [
     { name = "opensearch-py" },
     { name = "requests-aws4auth" },
@@ -186,6 +210,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "amazon-bedrock-workshop", extras = ["lab2", "lab3", "lab4"], marker = "extra == 'all'" },
     { name = "bedrock-agentcore", marker = "extra == 'lab4'", specifier = ">=1.13.0" },
     { name = "bedrock-agentcore-starter-toolkit", marker = "extra == 'lab4'", specifier = ">=0.3.9" },
     { name = "bert-score", marker = "extra == 'lab3'", specifier = ">=0.3.13" },
@@ -214,7 +239,7 @@ requires-dist = [
     { name = "tqdm", marker = "extra == 'lab3'", specifier = ">=4.68.1" },
     { name = "urllib3", marker = "extra == 'lab3'", specifier = ">=2.7.0" },
 ]
-provides-extras = ["lab2", "lab3", "lab4"]
+provides-extras = ["lab2", "lab3", "lab4", "all"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "ruff", specifier = ">=0.15.16,<0.16" }]

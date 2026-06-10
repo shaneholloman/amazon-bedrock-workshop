@@ -20,9 +20,9 @@ jobs:
 
       - name: Install base dependencies
         run: |
-          pip install --quiet boto3 botocore nbformat ipykernel
+          pip install --quiet .[all]
 
-      - name: Install lab dependencies
+      - name: Install additional dependencies
         run: |
           for req in $(find . -name "requirements.txt" -not -path "*/venv/*"); do
             echo "Installing from $req"
