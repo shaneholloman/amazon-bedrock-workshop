@@ -28,8 +28,8 @@ updates:
     directory: "/"
     # Avoid overlap with tutor & lab4 configs:
     exclude-paths:
-      - "/tutor"
-      - "/04_Agents"
+      - "/tutor/**"
+      - "/04_Agents/**"
     schedule:
       interval: "weekly"
       day: "monday"
