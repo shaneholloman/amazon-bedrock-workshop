@@ -2,7 +2,7 @@ name: Quality Checks
 
 on:
   push:
-    branches: [main, build/devtools]
+    branches: [main]
   pull_request:
     branches: [main]
 
