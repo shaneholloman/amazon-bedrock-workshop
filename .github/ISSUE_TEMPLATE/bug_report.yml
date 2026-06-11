@@ -49,17 +49,19 @@ body:
       description: Paste any error messages or tracebacks
       render: shell
 
-  - type: dropdown
+  - type: checkboxes
     id: environment
     attributes:
       label: Environment
+      description: Where were you running the lab?
       options:
-        - "Workshop Studio (AWS event)"
-        - "Self-paced (own AWS account)"
-        - "SageMaker Studio"
-        - "Local environment"
-    validations:
-      required: true
+        - label: Workshop Studio (AWS event)
+        - label: Self-paced (own AWS account)
+        - label: SageMaker Studio
+        - label: JupyterLab
+        - label: Code Server (Code Editor)
+        - label: VSCode (Local)
+        - label: Kiro
 
   - type: input
     id: region
@@ -70,5 +72,5 @@ body:
   - type: input
     id: kernel
     attributes:
-      label: SageMaker Kernel / Python Version
+      label: Notebook Kernel / Python Version
       placeholder: "e.g., conda_python3, Python 3.11"

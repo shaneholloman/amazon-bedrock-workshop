@@ -1,6 +1,6 @@
-## Description
+## Related Issue(s)
 
-<!-- Describe your changes here -->
+<!-- Link any related issues: Fixes #123, Relates to #456 -->
 
 ## Type of Change
 
@@ -11,20 +11,29 @@
 - [ ] Dependency update
 - [ ] CI/CD improvement
 
+## Description
+
+<!-- Describe your changes here -->
+
+## Workshop website updates
+
+<!-- Does this PR require any changes to https://catalog.workshops.aws/amazon-bedrock/en-US to keep in sync? If yes, please share details -->
+
 ## Checklist
 
-- [ ] Notebook outputs have been stripped (run `nbstripout` or verify pre-commit hook)
+- [ ] Notebooks contain no cell outputs
 - [ ] All links are valid (no broken URLs)
-- [ ] Markdown formatting passes linting
+- [ ] Markdown formatting passes linting (Run `pre-commit run --all-files` or similar)
 - [ ] CloudFormation templates pass `cfn-lint` (if applicable)
 - [ ] Code samples have been tested against current Bedrock API
 - [ ] Screenshots are current (if applicable)
-- [ ] README updated (if adding new content)
+- [ ] README(s) updated (if adding new content)
+- [ ] Updated CI/CD workflows if needed
 
 ## Testing
 
 <!-- How did you verify this change works? -->
 
-## Related Issues
+---
 
-<!-- Link any related issues: Fixes #123, Relates to #456 -->
+By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of your choice.
