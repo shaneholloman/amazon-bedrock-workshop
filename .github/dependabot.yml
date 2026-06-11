@@ -26,6 +26,10 @@ updates:
   # Python dependencies - Main workshop
   - package-ecosystem: "pip"
     directory: "/"
+    # Avoid overlap with tutor & lab4 configs:
+    exclude-paths:
+      - "/tutor"
+      - "/04_Agents"
     schedule:
       interval: "weekly"
       day: "monday"
