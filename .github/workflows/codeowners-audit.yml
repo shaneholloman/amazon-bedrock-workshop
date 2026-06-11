@@ -94,7 +94,7 @@ jobs:
           echo "has_issues=$HAS_ISSUES" >> "$GITHUB_OUTPUT"
 
       - name: Create or update audit issue
-        uses: peter-evans/create-issue-from-file@v5
+        uses: peter-evans/create-issue-from-file@v6
         with:
           title: "Monthly CODEOWNERS audit"
           content-filepath: ./audit-report.md
