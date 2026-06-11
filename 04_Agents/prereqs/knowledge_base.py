@@ -87,7 +87,7 @@ class KnowledgeBasesForAmazonBedrock:
         if suffix is not None:
             self.suffix = suffix
         else:
-            self.suffix = str(uuid.uuid4())[:4]
+            self.suffix = str(uuid.uuid4())[:8]
 
         self.identity = boto3.client(
             "sts", region_name=self.region_name
