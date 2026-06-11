@@ -1,7 +1,9 @@
 # Pre-commit hooks for workshop quality
-# Install: pip install pre-commit && pre-commit install
+# Install (see CONTRIBUTING.md for details):
+#   - With uv: uv tool install pre-commit --with pre-commit-uv && pre-commit install
+#   - With pip: pip install pre-commit && pre-commit install
 repos:
-  # Strip notebook outputs before commit
+  # Strip notebook outputs
   - repo: https://github.com/kynan/nbstripout
     rev: 0.9.1
     hooks:
