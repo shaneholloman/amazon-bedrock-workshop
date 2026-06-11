@@ -56,6 +56,6 @@ updates:
       day: "monday"
     labels:
       - "dependencies"
-      - "ci"
+      - "github_actions"
     commit-message:
       prefix: "chore(ci):"
