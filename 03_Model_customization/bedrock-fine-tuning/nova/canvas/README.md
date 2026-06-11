@@ -11,7 +11,7 @@ This repository provides resources and notebooks for fine-tuning the Amazon Nova
 ### Notebooks
 **1. Customize the model**
 
-In the notebook **1-CanvasFT-customization-job**, you will find step-by-step instructions on how to customize the Amazon Nova Canvas model. You will learn how to prepare the training dataset and launch a fine-tuning job. 
+In the notebook **1-CanvasFT-customization-job**, you will find step-by-step instructions on how to customize the Amazon Nova Canvas model. You will learn how to prepare the training dataset and launch a fine-tuning job.
 
 **2. Provision and test the customized model**
 

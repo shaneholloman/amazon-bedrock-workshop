@@ -10,29 +10,29 @@ def lambda_handler(event, context):
         item_id = item.get("id") or item.get("task_id", "unknown")
         messages = item.get("messages", [])
         metadata = item.get("metadata", {})
-        
+
         # Get ground truth - check both metadata and top-level reference_answer
         ground_truth = metadata.get("reference_answer", {}).get("final_answer")
         if not ground_truth:
             ground_truth = item.get("reference_answer", {}).get("final_answer")
         if not ground_truth:
             print(f"No ground truth found for id: {item_id}")
-        
+
         # Get assistant response
         assistant_response = ""
         for msg in messages:
             if msg.get("role") == "assistant":
                 assistant_response = msg.get("content", "")
-        
+
         # Compute score
         score = compute_score(assistant_response, ground_truth) if ground_truth else 0.0
-        
+
         results.append({
             "id": item_id,
             "aggregate_reward_score": score,
             "reward_components": {"correctness": score}
         })
-    
+
     return results
 
 

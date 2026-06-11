@@ -77,7 +77,7 @@
 {"question": "What's the syntax to find all files larger than 100MB and list them by size?", "answer": "terminal", "args":{'commands': ['find . -type f -size +100M -exec ls -lh {} + | sort -k5 -rh']}, "order_matters":True, "arg_pattern":None}
 {"question": "What's the command to remove all stopped Docker containers?", "answer": "terminal", "args":{'commands': ['docker container prune']}, "order_matters":True, "arg_pattern":None}
 {"question": "Give me the ommand to rename all .txt files to .bak in the current directory", "answer": "terminal", "args":{'commands': ['for file in *.txt; do mv "$file" "${file%.txt}.bak"; done']}, "order_matters":True, "arg_pattern":None}
-{"question": "How do I compress all .jpg files in the current directory individually?", "answer": "terminal", "args":{'commands': ['for file in *.jpg; do gzip "$file"; done']}, "order_matters":True, "arg_pattern":None}  
+{"question": "How do I compress all .jpg files in the current directory individually?", "answer": "terminal", "args":{'commands': ['for file in *.jpg; do gzip "$file"; done']}, "order_matters":True, "arg_pattern":None}
 {"question": "Who was Leonardo da Vinci?", "answer": "wikipedia", "args":{'query': 'Leonardo da Vinci'}, "order_matters":False, "arg_pattern":None}
 {"question": "Explain photosynthesis", "answer": "wikipedia", "args":{'query': 'photosynthesis'}, "order_matters":True, "arg_pattern":None}
 {"question": "Who wrote 'To Kill a Mockingbird'?", "answer": "wikipedia", "args":{'query': 'To Kill a Mockingbird author'}, "order_matters":False, "arg_pattern":None}
@@ -157,7 +157,7 @@
 {"question": "Explain the concept of natural selection", "answer": "wikipedia", "args":{'query': 'natural selection'}, "order_matters":False, "arg_pattern":None}
 {"question": "Can you explain the concept of quantum entanglement?", "answer": "wikipedia", "args":{'query': 'quantum entanglement'}, "order_matters":True, "arg_pattern":None}
 {"question": "I'm curious about the history of ancient Egypt", "answer": "wikipedia", "args":{'query': 'ancient Egypt history'}, "order_matters":False, "arg_pattern":None}
-{"question": "What can you tell me about the invention of the telephone?", "answer": "wikipedia", "args":{'query': 'invention of telephone'}, "order_matters":False, "arg_pattern":None}   
+{"question": "What can you tell me about the invention of the telephone?", "answer": "wikipedia", "args":{'query': 'invention of telephone'}, "order_matters":False, "arg_pattern":None}
 {"question": "Can you find YouTube videos on underwater photography techniques?", "answer": "youtube_search", "args":{'query': "underwater photography techniques"}, "order_matters":False, "arg_pattern":None}
 {"question": "I'm interested in learning about ancient Roman architecture. What videos are available?", "answer": "youtube_search", "args":{'query': "ancient Roman architecture"}, "order_matters":False, "arg_pattern":None}
 {"question": "Show me some YouTube content related to urban gardening, please.", "answer": "youtube_search", "args":{'query': "urban gardening"}, "order_matters":False, "arg_pattern":None}
@@ -236,7 +236,7 @@
 {"question": "Can you recommend some popular short film compilations?", "answer": "youtube_search", "args":{'query': "short film compilations"}, "order_matters":False, "arg_pattern":None}
 {"question": "I need videos on social media marketing strategies. Can you help?", "answer": "youtube_search", "args":{'query': "social media marketing strategies"}, "order_matters":False, "arg_pattern":None}
 {"question": "Where can I find foreign language movie trailers?", "answer": "youtube_search", "args":{'query': "foreign language movie trailers"}, "order_matters":False, "arg_pattern":None}
-{"question": "Do you have any videos about the latest medical breakthroughs?", "answer": "youtube_search", "args":{'query': "latest medical breakthroughs"}, "order_matters":False, "arg_pattern":None}  
+{"question": "Do you have any videos about the latest medical breakthroughs?", "answer": "youtube_search", "args":{'query': "latest medical breakthroughs"}, "order_matters":False, "arg_pattern":None}
 {"question": "Show me music videos.", "answer": "youtube_search", "args":{'query': "music videos"}, "order_matters":False, "arg_pattern":None}
 {"question": "What research is available on the benefits of probiotics?", "answer": "pubmed_search", "args":{"query":"probiotics benefits"}, "order_matters":False, "arg_pattern":None}
 {"question": "Can you find studies about the effectiveness of cognitive behavioral therapy?", "answer": "pubmed_search", "args":{"query":"cognitive behavioral therapy effectiveness"}, "order_matters":False, "arg_pattern":None}

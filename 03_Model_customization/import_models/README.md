@@ -37,7 +37,7 @@ An example trust policy allowing **both** services (for sharing the same role be
 
 ```json
 {
-    "Version":"2012-10-17",		 	 	 
+    "Version":"2012-10-17",
     "Statement": [
         {
             "Sid": "AssumeByBedrock",
@@ -76,7 +76,7 @@ For example, to grant access to pull all files from a particular S3 Bucket:
 
 ```json
 {
-    "Version":"2012-10-17",		 	 	 
+    "Version":"2012-10-17",
     "Statement": [
         {
             "Sid": "GetModelArtifacts",

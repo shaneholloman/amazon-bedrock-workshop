@@ -13,7 +13,7 @@ def get_tool_spec():
 
     :return: The tool specification for the terminal tool.
     """
-  
+
 
     return {
         "toolSpec": {
@@ -26,7 +26,7 @@ def get_tool_spec():
                         "commands": {
                             "type": "string",
                             "description": "TList of shell commands to run. Deserialized using json.loads",
-                        },                                                
+                        },
                     },
                     "required": ["commands"],
                 }
@@ -38,7 +38,7 @@ def get_tool_spec():
 def fetch_terminal_data(input_data):
     """
     Run shell commands on this MacOS machine.
-    
+
 
     :param input_data: The input data containing the commands.
     :return: Nothing.

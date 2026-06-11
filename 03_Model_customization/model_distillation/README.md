@@ -62,4 +62,3 @@ Ensure you have the necessary AWS permissions and have set up your environment a
 ## Contributing
 
 We welcome contributions to improve these samples. Please submit a pull request or open an issue to discuss proposed changes.
-

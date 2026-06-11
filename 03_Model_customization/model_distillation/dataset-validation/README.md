@@ -10,7 +10,7 @@ Below are 2 examples of valid prompts for model distillation.
         {
             "text": "A chat between a curious User and an artificial intelligence Bot. The Bot gives helpful, detailed, and polite answers to the User's questions."
         }
-    ],    
+    ],
     "messages": [
         {
             "role": "user",
@@ -34,7 +34,7 @@ Below are 2 examples of valid prompts for model distillation.
 `System` is optional, and so is the `assistant` content within `messages`. An example of a valid prompt without those is shown below
 ```
 {
-    "schemaVersion": "bedrock-conversation-2024",    
+    "schemaVersion": "bedrock-conversation-2024",
     "messages": [
         {
             "role": "user",

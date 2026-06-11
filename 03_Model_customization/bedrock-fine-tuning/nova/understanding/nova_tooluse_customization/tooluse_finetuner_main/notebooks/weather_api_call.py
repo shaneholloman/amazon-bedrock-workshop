@@ -13,7 +13,7 @@ def get_tool_spec():
 
     :return: The tool specification for the Weather tool.
     """
-  
+
 
     return {
         "toolSpec": {

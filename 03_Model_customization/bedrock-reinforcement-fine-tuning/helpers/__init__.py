@@ -9,7 +9,7 @@ from .lambda_utils import create_lambda_deployment_package, deploy_lambda_functi
 
 __all__ = [
     "create_lambda_execution_role",
-    "create_bedrock_rft_role", 
+    "create_bedrock_rft_role",
     "create_lambda_deployment_package",
     "deploy_lambda_function",
     "cleanup_lambda_deployment_package",

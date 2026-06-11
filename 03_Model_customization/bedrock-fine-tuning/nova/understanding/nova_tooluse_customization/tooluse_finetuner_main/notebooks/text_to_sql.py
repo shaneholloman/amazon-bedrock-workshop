@@ -13,7 +13,7 @@ def get_tool_spec():
 
     :return: The tool specification for the SQL query tool.
     """
-  
+
 
     return {
         "toolSpec": {
@@ -31,7 +31,7 @@ def get_tool_spec():
                             "type": "string",
                             "description": "a condition like: where salary > 200",
                         },
-                        
+
                     },
                     "required": ["table", "condition"],
                 }
@@ -43,7 +43,7 @@ def get_tool_spec():
 def fetch_sql_data(input_data):
     """
     Pull the relevant table and any conditions used.
-    
+
 
     :param input_data: The input data containing the table, codition.
     :return: Nothing.

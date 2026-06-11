@@ -33,7 +33,7 @@ python3 nova_ft_dataset_validator.py -i <file path> -m <model name>
 ### Limitations
 
 This script cannot perform the following validations, as the logic is proprietary to Nova model customization:
-    - Image size validation 
+    - Image size validation
     - Video length validation
     - Checking whether the service has access to S3 paths
 

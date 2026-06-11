@@ -12,7 +12,7 @@ def get_tool_spec():
 
     :return: The tool specification for the terminal tool.
     """
-  
+
 
     return {
         "toolSpec": {
@@ -25,7 +25,7 @@ def get_tool_spec():
                         "query": {
                             "type": "string",
                             "description": "internet search query to look up",
-                        },                                                
+                        },
                     },
                     "required": ["query"],
                 }
@@ -37,7 +37,7 @@ def get_tool_spec():
 def fetch_duckduckgo_results_json_data(input_data):
     """
     Runs query through Duck Duck Go Search.
-    
+
     :param input_data: The input data containing the query.
     :return: Nothing.
     """

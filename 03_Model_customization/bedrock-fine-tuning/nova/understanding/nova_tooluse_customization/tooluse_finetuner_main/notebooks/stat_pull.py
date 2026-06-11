@@ -33,7 +33,7 @@ def get_tool_spec():
                         "team": {
                             "type": "string",
                             "description": "A specific team the stats are associated with, e.g. Cincinnati Bengals, if no team, specify None",
-                        },                        
+                        },
                     },
                     "required": ["league", "year", "team"],
                 }

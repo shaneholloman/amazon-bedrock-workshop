@@ -13,7 +13,7 @@ def get_tool_spec():
 
     :return: The tool specification for the terminal tool.
     """
-  
+
 
     return {
         "toolSpec": {
@@ -26,7 +26,7 @@ def get_tool_spec():
                         "query": {
                             "type": "string",
                             "description": "pubmed search query to look up",
-                        },                                                
+                        },
                     },
                     "required": ["query"],
                 }
@@ -38,7 +38,7 @@ def get_tool_spec():
 def fetch_pubmed_search_data(input_data):
     """
     Runs query through pubmed search.
-    
+
     :param input_data: The input data containing the query.
     :return: Nothing.
     """

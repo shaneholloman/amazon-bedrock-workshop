@@ -14,7 +14,7 @@ def get_tool_spec():
 
     :return: The tool specification for the terminal tool.
     """
-  
+
 
     return {
         "toolSpec": {
@@ -27,7 +27,7 @@ def get_tool_spec():
                         "query": {
                             "type": "string",
                             "description": "query to look up on wikipedia",
-                        },                                                
+                        },
                     },
                     "required": ["query"],
                 }
@@ -39,7 +39,7 @@ def get_tool_spec():
 def fetch_wikipidea_data(input_data):
     """
     Runs query on Wikipidea through a wrapper.
-    
+
 
     :param input_data: The input data containing the query.
     :return: Nothing.

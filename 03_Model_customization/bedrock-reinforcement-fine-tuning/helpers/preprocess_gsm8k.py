@@ -5,14 +5,14 @@ import json, re
 
 def preprocess_gsm8k(hf_path="openai/gsm8k", train_size=256, test_size=256, output_dir="."):
     ds = load_dataset(hf_path, "main")
-    
+
     def extract_answer(answer_text):
         match = re.search(r'####\s*(-?\d+(?:,\d+)*)', answer_text)
         return match.group(1).replace(',', '') if match else ""
-    
+
     def extract_steps(answer_text):
         return [s.strip() for s in answer_text.split('\n') if s.strip() and not s.strip().startswith('####')]
-    
+
     def format_row(row, idx, split):
         return {
             "messages": [
@@ -30,7 +30,7 @@ def preprocess_gsm8k(hf_path="openai/gsm8k", train_size=256, test_size=256, outp
             "original_question": row['question'],
             "original_answer": row['answer']
         }
-    
+
     for split, size, filename in [("train", train_size, "train.jsonl"), ("test", test_size, "test.jsonl")]:
         with open(f"{output_dir}/{filename}", "w") as f:
             for i, row in enumerate(ds[split].select(range(min(size, len(ds[split]))))):

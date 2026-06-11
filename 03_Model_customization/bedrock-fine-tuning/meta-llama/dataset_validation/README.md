@@ -36,7 +36,7 @@ python3 dataset_validation.py -d <dataset type> -f <file path> -m <model name>
         - Checks if roles are supported
         - Prevents assistant messages from containing images
     - Validates prompt-completion format for models using prompt-completion input
-    
+
 
 ### Limitations Not Validated by the Script
 1. Images

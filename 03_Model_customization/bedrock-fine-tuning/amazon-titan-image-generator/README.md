@@ -11,7 +11,7 @@ This repository provides resources and notebooks for fine-tuning the Amazon Tita
 ### Notebooks
 **1. Customize the model**
 
-In the notebook **1-TIGFT-customization-job**, you will find step-by-step instructions on how to customize the Amazon Titan Image Generator model. You will learn how to prepare the training dataset and launch a fine-tuning job. 
+In the notebook **1-TIGFT-customization-job**, you will find step-by-step instructions on how to customize the Amazon Titan Image Generator model. You will learn how to prepare the training dataset and launch a fine-tuning job.
 
 **2. Provision and test the customized model**
 

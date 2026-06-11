@@ -17,12 +17,12 @@ This tool provides a simple and efficient way to validate JSONL format data for 
 3. Checks for file size limits:
    - Training data: Max 10GB
    - Validation data: Max 1GB
-   
+
 4. Validates line counts:
    - Training data: 32 to 10,000 lines
    - Validation data: 32 to 1,000 lines
    - Total (training + validation): Max 10,000 lines
-   
+
 5. Validates data structure and content for each entry
 
 6. Estimates and checks token counts per entry: Max 32,000 tokens
