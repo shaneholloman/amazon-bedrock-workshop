@@ -43,4 +43,5 @@ repos:
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
-        args: ["--maxkb=1000"]
+        # Need to have quite a large limit here because Model Customization includes 4-5MB files:
+        args: ["--maxkb=5000"]
