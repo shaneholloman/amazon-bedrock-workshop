@@ -6,12 +6,17 @@ AWSCLIV2.pkg
 
 # IDEs and environment:
 .env
-.idea
+.idea/
+CLAUDE.md
 
 # Python:
 *.egg-info
+*.ipynb_checkpoints/
 .ipynb_checkpoints
+# (nbstripout is handled via .gitattributes filter)
 .venv
+env/
+venv/
 __pycache__
 
 # Operating Systems:

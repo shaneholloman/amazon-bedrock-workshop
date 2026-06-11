@@ -32,14 +32,17 @@ This learning path teaches how to use Amazon Bedrock's OpenAI-compatible APIs (P
 ## Teaching Flow
 
 ⚠️ **CRITICAL INSTRUCTION FOR THIS LEARNING PATH:**
+
 - **USE OPENAI SDK ONLY** - Do NOT use boto3 or bedrock-runtime client
 - **DEFAULT TO provide_token()** - Use AWS credentials via token generator (works in SageMaker/notebooks)
 - **API KEYS ARE ALTERNATIVE** - Only mention short-term API keys if user asks or has issues with credentials
 
 ### Step 1: Setup with OpenAI SDK
+
 **Goal:** Configure the OpenAI SDK to connect to Bedrock's Mantle endpoint
 
 **What to show:**
+
 - Install OpenAI SDK (`pip install openai`)
 - Configure endpoint URL for Bedrock Mantle
 - Authenticate with AWS credentials via provide_token() (DEFAULT)
@@ -47,6 +50,7 @@ This learning path teaches how to use Amazon Bedrock's OpenAI-compatible APIs (P
 - **IMPORTANT:** When user asks to use a specific model (e.g., "Claude", "Haiku"), ALWAYS list models first, filter by keyword, then use the correct model ID
 
 **Code pattern:**
+
 ```python
 # Install the OpenAI SDK and AWS token generator
 # !pip install openai aws-bedrock-token-generator
@@ -73,6 +77,7 @@ for model in models.data[:5]:
 ```
 
 **Key points to emphasize:**
+
 - Mantle provides OpenAI SDK compatibility for Bedrock
 - `provide_token()` automatically uses your AWS credentials (IAM role/profile)
 - Works seamlessly in SageMaker, EC2, or local environments with AWS CLI configured
@@ -81,12 +86,14 @@ for model in models.data[:5]:
 - **CRITICAL:** Model IDs in Mantle are different from standard Bedrock (e.g., `anthropic.claude-3-5-sonnet-20241022-v2:0` vs model names in Mantle). Always list and filter models to find the correct ID.
 
 **Authentication options (in order of preference):**
+
 1. **provide_token()** - Uses AWS credentials automatically (recommended)
 2. **API keys** - Generate short-term keys in Bedrock console (alternative)
 
 **Note:** API keys can be used if you prefer explicit credentials or are outside AWS environment.
 
 **Common pitfalls:**
+
 - Using boto3/bedrock-runtime instead of OpenAI SDK ❌
 - Wrong endpoint URL format (must include region and /v1)
 - Not setting OPENAI_BASE_URL before creating client
@@ -95,16 +102,19 @@ for model in models.data[:5]:
 ---
 
 ### Step 2: Finding Responses API Compatible Models
+
 **Goal:** Discover which models support the Responses API
 
 ⚠️ **CRITICAL:** Not all models support the Responses API! You'll get a 400 error: `The model 'X' does not support the '/v1/responses' API`
 
 **What to show:**
+
 - List available models
 - Filter for Responses API compatible models (typically OpenAI models)
 - Chat Completions API works with ALL models, Responses API only works with specific models
 
 **Code pattern:**
+
 ```python
 from openai import OpenAI
 from aws_bedrock_token_generator import provide_token
@@ -133,6 +143,7 @@ else:
 ```
 
 **Key points:**
+
 - **Responses API compatibility is limited** - primarily OpenAI-family models
 - Claude, Llama, Titan, and most other models will throw 400 errors with Responses API
 - **Chat Completions API works with ALL models** - use this for broader compatibility
@@ -142,15 +153,18 @@ else:
 ---
 
 ### Step 3: Chat Completions API (Works with ALL Models)
+
 **Goal:** Use the familiar OpenAI Chat Completions pattern - compatible with every Bedrock model
 
 **What to show:**
+
 - Send messages with full conversation history
 - Stateless pattern - each request is independent
 - Works with Claude, Llama, Titan, Nova, and ALL other models
 - **Use this when Responses API throws compatibility errors**
 
 **Code pattern:**
+
 ```python
 from openai import OpenAI
 from aws_bedrock_token_generator import provide_token
@@ -179,6 +193,7 @@ print(response.choices[0].message.content)
 ```
 
 **Key points to emphasize:**
+
 - Chat Completions is stateless - you manage the conversation history
 - Must send full message history with each request
 - **Works with ALL Bedrock models** (Claude, Llama, Titan, Nova, OpenAI, etc.)
@@ -187,6 +202,7 @@ print(response.choices[0].message.content)
 - **Default choice for most use cases**
 
 **Multi-turn conversation with Chat Completions:**
+
 ```python
 from openai import OpenAI
 from aws_bedrock_token_generator import provide_token
@@ -207,12 +223,12 @@ messages = [
 
 def chat(user_message):
     messages.append({"role": "user", "content": user_message})
-    
+
     response = client.chat.completions.create(
         model=model_id,
         messages=messages
     )
-    
+
     assistant_reply = response.choices[0].message.content
     messages.append({"role": "assistant", "content": assistant_reply})
     return assistant_reply
@@ -227,6 +243,7 @@ print(f"A: {chat('How does it compare to EBS?')}")
 ```
 
 **Best practices:**
+
 - Keep conversation history manageable (token limits apply)
 - Trim old messages when history gets long
 - System message sets behavior for entire conversation
@@ -235,17 +252,20 @@ print(f"A: {chat('How does it compare to EBS?')}")
 ---
 
 ### Step 4: Responses API (Stateful - Limited Model Support)
+
 **Goal:** Use server-managed conversation state instead of client history
 
 ⚠️ **IMPORTANT:** Responses API only works with specific models (primarily OpenAI family). If you get a 400 error, use Chat Completions API instead.
 
 **What to show:**
+
 - Responses API maintains context server-side
 - Chain responses using `previous_response_id`
 - No need to send full conversation history
 - Only use with compatible models (check Step 2)
 
 **Code pattern:**
+
 ```python
 from openai import OpenAI
 from aws_bedrock_token_generator import provide_token
@@ -301,6 +321,7 @@ print(f"Turn 3: {response.output_text}")
 ```
 
 **Key points to emphasize:**
+
 - Responses API is **stateful** - server remembers conversation
 - Use `previous_response_id` to chain responses
 - Each response gets a unique ID for retrieval/chaining
@@ -310,6 +331,7 @@ print(f"Turn 3: {response.output_text}")
 - If you get 400 "does not support '/v1/responses' API" → use Chat Completions instead
 
 **Responses API vs Chat Completions:**
+
 | Chat Completions | Responses API |
 |-----------------|---------------|
 | Stateless | Stateful |
@@ -322,14 +344,17 @@ print(f"Turn 3: {response.output_text}")
 ---
 
 ### Step 5: Streaming with Chat Completions (All Models)
+
 **Goal:** Stream responses for progressive display - works with ALL models
 
 **What to show:**
+
 - Stream text as it's generated
 - Handle streaming events
 - Works with Claude, Llama, OpenAI, and all other models
 
 **Code pattern:**
+
 ```python
 from openai import OpenAI
 from aws_bedrock_token_generator import provide_token
@@ -362,12 +387,14 @@ print("\n")
 ```
 
 **Key points to emphasize:**
+
 - Streaming provides better UX (progressive display)
 - Events arrive incrementally - display as received
 - Use `flush=True` for immediate display
 - **Works with ALL models** on Bedrock Mantle
 
 **Streaming multi-turn conversation:**
+
 ```python
 from openai import OpenAI
 from aws_bedrock_token_generator import provide_token
@@ -384,20 +411,20 @@ messages = [{"role": "system", "content": "You are a helpful AWS expert."}]
 def stream_chat(user_input):
     """Stream a response and update conversation history."""
     messages.append({"role": "user", "content": user_input})
-    
+
     stream = client.chat.completions.create(
         model=model_id,
         messages=messages,
         stream=True
     )
-    
+
     full_response = ""
     for chunk in stream:
         if chunk.choices[0].delta.content:
             content = chunk.choices[0].delta.content
             print(content, end="", flush=True)
             full_response += content
-    
+
     messages.append({"role": "assistant", "content": full_response})
     print("\n")
 
@@ -415,14 +442,17 @@ stream_chat("What models does it support?")
 ---
 
 ### Step 6: Retrieving Previous Responses
+
 **Goal:** Access conversation history via response IDs
 
 **What to show:**
+
 - Retrieve responses by ID
 - Access conversation history
 - Useful for resuming conversations or auditing
 
 **Code pattern:**
+
 ```python
 from openai import OpenAI
 
@@ -449,12 +479,14 @@ print(f"Status: {retrieved.status}")
 ```
 
 **Key points to emphasize:**
+
 - Every response gets a unique ID
 - Retrieve responses later for auditing, debugging, or resuming
 - Response includes full context: input, output, model, status
 - IDs persist server-side (check retention policy)
 
 **Use cases:**
+
 - Resume conversations across sessions
 - Audit conversation flows
 - Debug model responses
@@ -463,14 +495,17 @@ print(f"Status: {retrieved.status}")
 ---
 
 ### Step 7: Background Mode for Async Inference
+
 **Goal:** Submit long-running requests asynchronously
 
 **What to show:**
+
 - Background mode for async processing
 - Poll for completion
 - Useful for batch or long-generation tasks
 
 **Code pattern:**
+
 ```python
 from openai import OpenAI
 import time
@@ -507,18 +542,21 @@ print(f"Output: {response.output_text}")
 ```
 
 **Key points to emphasize:**
+
 - Background mode returns immediately (async)
 - Poll with `retrieve()` to check status
 - Status transitions: in_progress → completed / failed
 - Only available with Responses API (not Chat Completions)
 
 **Use cases:**
+
 - Batch processing
 - Long document generation
 - Non-interactive workflows
 - Queueing multiple requests
 
 **Best practices:**
+
 - Implement exponential backoff when polling
 - Set reasonable timeout limits
 - Handle failure states gracefully
@@ -528,6 +566,7 @@ print(f"Output: {response.output_text}")
 ## Summary
 
 By the end of this path, learners should be able to:
+
 - Use OpenAI SDK with Bedrock via Mantle endpoint
 - Authenticate with AWS credentials using provide_token()
 - Understand Chat Completions (works with ALL models) vs Responses API (limited compatibility)
@@ -539,6 +578,7 @@ By the end of this path, learners should be able to:
 - Use background mode for async inference (Responses API only)
 
 ## Next Steps
+
 - Explore tool use (function calling) with Responses API
 - Add guardrails for content safety
 - Use Projects API for workload isolation
@@ -547,17 +587,20 @@ By the end of this path, learners should be able to:
 ## Technical Notes
 
 **Endpoint URL Format:**
+
 ```
 https://bedrock-mantle.{REGION}.api.aws/v1
 ```
 
 **Authentication:**
+
 - **Primary:** AWS credentials via `provide_token()` from aws-bedrock-token-generator
 - **Alternative:** Bedrock API keys (generated in console)
 
 **Key Differences:**
 
 **Chat Completions:**
+
 - Stateless (client manages history)
 - OpenAI-standard API
 - Send full conversation each time
@@ -565,6 +608,7 @@ https://bedrock-mantle.{REGION}.api.aws/v1
 - Recommended for most use cases
 
 **Responses API:**
+
 - Stateful (server manages history)
 - Bedrock extension to OpenAI
 - Chain with `previous_response_id`
@@ -574,18 +618,21 @@ https://bedrock-mantle.{REGION}.api.aws/v1
 - Use only when you have compatible models
 
 **Model Compatibility:**
+
 - Chat Completions: Claude, Llama, Titan, Nova, OpenAI, all others ✓
 - Responses API: Primarily OpenAI-family models only ⚠️
 - If you get 400 "does not support '/v1/responses' API" → use Chat Completions
 - Always test model compatibility or filter for known-compatible families
 
 **Model IDs:**
+
 - Use Mantle model IDs (e.g., `anthropic.claude-3-5-sonnet-20241022-v2:0`)
 - Different from standard Bedrock IDs
 - List with `client.models.list()`
 - Filter by keyword to find specific models
 
 **Cost Considerations:**
+
 - Charged per token (input + output)
 - Responses API doesn't reduce token usage (context still processed)
 - Background mode has same cost as synchronous

@@ -1,0 +1,37 @@
+name: Content Update Request
+description: Request new content, updated examples, or improvements
+title: "[Content]: "
+labels: ["enhancement", "content"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Suggest improvements or new content for the workshop.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Update Type
+      options:
+        - "New lab/module"
+        - "Update existing content"
+        - "Add new model/feature coverage"
+        - "Improve documentation"
+        - "Update screenshots"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What would you like to see added or changed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale
+      description: Why is this change needed? (e.g., new Bedrock feature, outdated content)

@@ -1,8 +1,9 @@
-import boto3
-import os
-from boto3.session import Session
-import yaml
 import argparse
+import os
+
+import boto3
+import yaml
+from boto3.session import Session
 
 
 def read_yaml_file(file_path):

@@ -1,11 +1,11 @@
 import json
+
 import boto3
 
 
 def get_kb_id(kb_name):
     smm_client = boto3.client("ssm")
-    kb_id = smm_client.get_parameter(
-        Name=f"{kb_name}-kb-id", WithDecryption=False)
+    kb_id = smm_client.get_parameter(Name=f"{kb_name}-kb-id", WithDecryption=False)
     print("Knowledge Base Id:", kb_id["Parameter"]["Value"])
     return kb_id["Parameter"]["Value"]
 
@@ -19,7 +19,9 @@ def get_db_table_name(kb_name):
     return table_name["Parameter"]["Value"]
 
 
-def attach_inline_policy(role_arn, policy_file, policy_name: str = "InlinePolicy") -> None:
+def attach_inline_policy(
+    role_arn, policy_file, policy_name: str = "InlinePolicy"
+) -> None:
     """
     Attaches an inline IAM policy (from a JSON file) to the specified IAM role.
 
@@ -42,7 +44,7 @@ def attach_inline_policy(role_arn, policy_file, policy_name: str = "InlinePolicy
     iam.put_role_policy(
         RoleName=role_name,
         PolicyName=policy_name,
-        PolicyDocument=json.dumps(policy_doc)
+        PolicyDocument=json.dumps(policy_doc),
     )
 
     print(f"✅ Inline policy '{policy_name}' attached to role '{role_name}'.")

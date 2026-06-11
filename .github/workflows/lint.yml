@@ -1,0 +1,83 @@
+name: Quality Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: DavidAnson/markdownlint-cli2-action@v23
+        with:
+          globs: "**/*.md"
+
+  yaml-lint:
+    name: YAML Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: "."
+          config_data: |
+            extends: default
+            rules:
+              line-length:
+                max: 200
+              truthy:
+                allowed-values: ['true', 'false', 'on']
+              document-start: disable
+
+  python-lint:
+    name: Python Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/ruff-action@v4.0.0
+        with:
+          version: 0.15.16
+
+  notebook-output-check:
+    name: Verify Notebooks Are Clean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install nbstripout nbformat
+      - name: Check notebooks have no outputs
+        run: |
+          DIRTY=0
+          while IFS= read -r -d '' nb; do
+            if python -c "
+          import json, sys
+          with open(sys.argv[1]) as f:
+              nb_data = json.load(f)
+          for cell in nb_data.get('cells', []):
+              if cell.get('cell_type') == 'code':
+                  if cell.get('outputs') and len(cell['outputs']) > 0:
+                      sys.exit(1)
+                  if cell.get('execution_count') is not None:
+                      sys.exit(1)
+          " "$nb" 2>/dev/null; then
+              echo "✅ $nb - clean"
+            else
+              echo "❌ $nb - has outputs or execution counts"
+              DIRTY=1
+            fi
+          done < <(find . -name "*.ipynb" -not -path "./.ipynb_checkpoints/*" -not -path "./node_modules/*" -print0)
+          if [ $DIRTY -eq 1 ]; then
+            echo ""
+            echo "::error::Some notebooks contain outputs. Run 'nbstripout' before committing."
+            echo "Tip: Install the pre-commit hook with 'pre-commit install'"
+            exit 1
+          fi

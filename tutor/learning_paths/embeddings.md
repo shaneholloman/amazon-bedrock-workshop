@@ -30,14 +30,17 @@ This learning path teaches how to generate embeddings for text and images using 
 ## Teaching Flow
 
 ### Step 1: Text Embeddings Basics
+
 **Goal:** Generate embeddings for text and understand the output
 
 **What to show:**
+
 - Use Nova 2 Multimodal Embeddings via Converse API
 - Generate embedding vectors for text input
 - Understand embedding dimensions and normalization
 
 **Code pattern:**
+
 ```python
 import boto3
 import json
@@ -63,12 +66,14 @@ print(f"First 5 values: {embedding[:5]}")
 ```
 
 **Key points to emphasize:**
+
 - Titan Multimodal Embeddings returns 1024-dimensional vectors
 - Use InvokeModel API (not Converse) for embeddings
 - Embeddings capture semantic meaning - similar texts have similar vectors
 - Model ID: `amazon.titan-embed-image-v1`
 
 **Common pitfalls:**
+
 - Trying to use Converse API (embeddings use InvokeModel)
 - Expecting text output instead of embedding vectors
 - Not understanding that embeddings are for downstream tasks, not human-readable
@@ -76,14 +81,17 @@ print(f"First 5 values: {embedding[:5]}")
 ---
 
 ### Step 2: Computing Similarity Between Texts
+
 **Goal:** Use embeddings to measure how similar two texts are
 
 **What to show:**
+
 - Generate embeddings for multiple texts
 - Calculate cosine similarity between vectors
 - Demonstrate semantic similarity vs keyword matching
 
 **Code pattern:**
+
 ```python
 import numpy as np
 
@@ -114,12 +122,14 @@ print(f"Query vs Doc2 similarity: {cosine_similarity(query_emb, doc2_emb):.4f}")
 ```
 
 **Key points to emphasize:**
+
 - Cosine similarity ranges from -1 to 1 (1 = identical, 0 = unrelated, -1 = opposite)
 - Embeddings capture meaning beyond keywords
 - High similarity = semantically related content
 - This is the foundation for semantic search
 
 **Best practices:**
+
 - Normalize embeddings before computing similarity (Nova may already do this)
 - Use cosine similarity for high-dimensional vectors
 - Consider using libraries like `scipy` or `scikit-learn` for production
@@ -127,14 +137,17 @@ print(f"Query vs Doc2 similarity: {cosine_similarity(query_emb, doc2_emb):.4f}")
 ---
 
 ### Step 3: Building a Simple Semantic Search
+
 **Goal:** Search through documents using embeddings
 
 **What to show:**
+
 - Create embeddings for a document collection
 - Find most relevant documents for a query
 - Demonstrate ranking by similarity
 
 **Code pattern:**
+
 ```python
 # Document collection
 documents = [
@@ -164,12 +177,14 @@ for doc, score in ranked_results[:3]:
 ```
 
 **Key points to emphasize:**
+
 - Semantic search finds relevant content even without exact keyword matches
 - Pre-compute document embeddings once, reuse for multiple queries
 - Ranking by similarity score shows most relevant results first
 - This scales to millions of documents with vector databases
 
 **Real-world applications:**
+
 - RAG (Retrieval Augmented Generation) systems
 - Document search engines
 - Recommendation systems
@@ -178,14 +193,17 @@ for doc, score in ranked_results[:3]:
 ---
 
 ### Step 4: Image and Multimodal Embeddings
+
 **Goal:** Generate embeddings for images and compare cross-modal similarity
 
 **What to show:**
+
 - Embed images using the multimodal model
 - Compare text queries to images
 - Demonstrate cross-modal retrieval
 
 **Code pattern:**
+
 ```python
 import base64
 
@@ -222,18 +240,21 @@ for query in text_queries:
 ```
 
 **Key points to emphasize:**
+
 - Titan Multimodal Embeddings handles both text and images
 - Text and image embeddings live in the same vector space (both 1024-dim)
 - Enables cross-modal search (text query → find images)
 - Useful for: image search, visual recommendation, multimodal RAG
 
 **Use cases:**
+
 - E-commerce: "Find products that look like this"
 - Content moderation: Match images to policy text
 - Visual search: Text description → find matching images
 - Multimodal RAG: Include images in knowledge retrieval
 
 **Best practices:**
+
 - Use JPEG or PNG format for images
 - Preprocess images for consistency (resize, normalize)
 - Store embeddings in vector databases for scale (Pinecone, OpenSearch, pgvector)
@@ -243,12 +264,14 @@ for query in text_queries:
 ## Summary
 
 By the end of this path, learners should be able to:
+
 - Generate embeddings for text using Titan Multimodal Embeddings
 - Calculate similarity between texts using cosine similarity
 - Build a simple semantic search system
 - Work with image embeddings for multimodal search
 
 ## Next Steps
+
 - Integrate with vector databases (OpenSearch, Pinecone)
 - Build a RAG system with embeddings + text generation
 - Explore advanced retrieval strategies (hybrid search, reranking)
@@ -262,12 +285,14 @@ By the end of this path, learners should be able to:
 **Embedding Dimensions:** 1024
 
 **Supported Inputs:**
+
 - Text (up to model's context limit)
 - Images (JPEG, PNG)
 
 **Output:** Vector of floats representing semantic meaning
 
 **Cost Considerations:**
+
 - Embeddings are charged per input token/image
 - Pre-compute and cache embeddings when possible
 - Batch processing for large document collections

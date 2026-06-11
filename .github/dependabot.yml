@@ -1,0 +1,61 @@
+version: 2
+updates:
+  # Python dependencies - tutor app
+  - package-ecosystem: "pip"
+    directory: "/tutor"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps):"
+    groups:
+      boto3-and-botocore:
+        patterns:
+          - "boto3"
+          - "botocore"
+      aws-sdk:
+        patterns:
+          - "aws-*"
+          - "sagemaker*"
+
+  # Python dependencies - Main workshop
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps):"
+
+  # Python dependencies - Agents sparate requirements.txt
+  - package-ecosystem: "pip"
+    directory: "/04_Agents"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps):"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "ci"
+    commit-message:
+      prefix: "chore(ci):"

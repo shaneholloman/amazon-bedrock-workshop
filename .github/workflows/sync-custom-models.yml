@@ -2,7 +2,7 @@ name: Sync custom-models from amazon-bedrock-samples
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Daily at 06:00 UTC
+    - cron: '0 6 * * 1'  # Weekly on Monday at 06:00 UTC
   workflow_dispatch:       # Also allows manual trigger from GitHub UI
 
 jobs:
@@ -10,10 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
       - name: Checkout amazon-bedrock-workshop
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -36,23 +42,58 @@ jobs:
           cat > 03_Model_customization/README.md << 'EOF'
           # Model Customization
 
-          > ⚠️ **AWS event participants:** Model customization jobs (fine-tuning, continued pre-training, distillation) **cannot be run in AWS-managed event accounts** due to service quota restrictions. If you are at an AWS-run workshop, skip the hands-on portion of this module and use it as a reference. To run these labs, use your own AWS account.
+          > **AWS event participants:** Model customization jobs (fine-tuning,
+          > continued pre-training, distillation) **cannot be run in
+          > AWS-managed event accounts** due to service quota restrictions.
+          > Skip the hands-on portion at AWS-run workshops and use it as
+          > a reference. To run these labs, use your own AWS account.
 
-          > **Note:** The contents of this folder are automatically synced from the canonical source:
-          > [aws-samples/amazon-bedrock-samples/custom-models](https://github.com/aws-samples/amazon-bedrock-samples/tree/main/custom-models)
-          >
-          > Do not edit files here directly — changes will be overwritten on the next sync.
-          > To contribute or report issues, please open a PR in the source repository.
+          > **Note:** This folder is synced from
+          > [amazon-bedrock-samples/custom-models][src].
+          > Do not edit files here directly — changes will be overwritten.
+          > To contribute, open a PR in the source repository.
+
+          [src]: https://github.com/aws-samples/amazon-bedrock-samples/tree/main/custom-models
           EOF
 
-      - name: Commit and push if changed
+      - name: Run pre-commit hooks on synced files
+        run: |
+          pip install pre-commit
+          pre-commit run --files 03_Model_customization/**
+
+      - name: Create PR if changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add 03_Model_customization/
+
           if git diff --cached --quiet; then
             echo "No changes to sync."
+            exit 0
+          fi
+
+          BRANCH="automated/sync-custom-models-$(date +%Y%m%d)"
+          git checkout -b "$BRANCH"
+          git commit -m "chore: sync 03_Model_customization from amazon-bedrock-samples"
+          git push -u origin "$BRANCH"
+
+          # Check if a sync PR already exists
+          EXISTING=$(gh pr list \
+            --head "automated/sync-custom-models" \
+            --state open --json number \
+            --jq '.[0].number' 2>/dev/null || echo "")
+          if [ -n "$EXISTING" ]; then
+            echo "Sync PR #$EXISTING already open — skipping."
           else
-            git commit -m "Sync 03_Model_customization from amazon-bedrock-samples/custom-models"
-            git push
+            UPSTREAM="amazon-bedrock-samples/custom-models"
+            gh pr create \
+              --title "chore: sync custom-models from upstream" \
+              --body "Automated weekly sync from [$UPSTREAM][src].
+
+          [src]: https://github.com/aws-samples/$UPSTREAM
+
+          Please review the diff for any breaking changes." \
+              --label "automated,dependencies"
           fi

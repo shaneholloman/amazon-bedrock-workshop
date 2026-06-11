@@ -8,22 +8,23 @@ It includes methods for creating, updating, and invoking Knowledge Bases, as wel
 IAM roles and OpenSearch Serverless.
 """
 
+import argparse
 import json
-import boto3
+import os
+import pprint
 import time
 import uuid
+
+import boto3
+import yaml
 from botocore.exceptions import ClientError
 from opensearchpy import (
-    OpenSearch,
-    RequestsHttpConnection,
     AWSV4SignerAuth,
+    OpenSearch,
     RequestError,
+    RequestsHttpConnection,
 )
-import pprint
 from retrying import retry
-import yaml
-import os
-import argparse
 
 valid_embedding_models = [
     "cohere.embed-multilingual-v3",
@@ -82,16 +83,22 @@ class KnowledgeBasesForAmazonBedrock:
             .get_caller_identity()
             .get("Account")
         )
-        
+
         if suffix is not None:
             self.suffix = suffix
         else:
             self.suffix = str(uuid.uuid4())[:4]
-            
-        self.identity = boto3.client("sts", region_name=self.region_name).get_caller_identity()["Arn"]
-        self.aoss_client = boto3_session.client("opensearchserverless", region_name=self.region_name)
+
+        self.identity = boto3.client(
+            "sts", region_name=self.region_name
+        ).get_caller_identity()["Arn"]
+        self.aoss_client = boto3_session.client(
+            "opensearchserverless", region_name=self.region_name
+        )
         self.s3_client = boto3.client("s3", region_name=self.region_name)
-        self.bedrock_agent_client = boto3.client("bedrock-agent", region_name=self.region_name)
+        self.bedrock_agent_client = boto3.client(
+            "bedrock-agent", region_name=self.region_name
+        )
 
         credentials = boto3.Session().get_credentials()
         self.awsauth = AWSV4SignerAuth(credentials, self.region_name, "aoss")
@@ -193,7 +200,7 @@ class KnowledgeBasesForAmazonBedrock:
             print(
                 "========================================================================================"
             )
-            print(f"Step 3 - Creating OSS encryption, network and data access policies")
+            print("Step 3 - Creating OSS encryption, network and data access policies")
             encryption_policy, network_policy, access_policy = (
                 self.create_policies_in_oss(
                     encryption_policy_name,
@@ -207,7 +214,7 @@ class KnowledgeBasesForAmazonBedrock:
                 "========================================================================================"
             )
             print(
-                f"Step 4 - Creating OSS Collection (this step takes a couple of minutes to complete)"
+                "Step 4 - Creating OSS Collection (this step takes a couple of minutes to complete)"
             )
             host, collection, collection_id, collection_arn = self.create_oss(
                 vector_store_name, oss_policy_name, bedrock_kb_execution_role
@@ -225,12 +232,12 @@ class KnowledgeBasesForAmazonBedrock:
             print(
                 "========================================================================================"
             )
-            print(f"Step 5 - Creating OSS Vector Index")
+            print("Step 5 - Creating OSS Vector Index")
             self.create_vector_index(index_name)
             print(
                 "========================================================================================"
             )
-            print(f"Step 6 - Creating Knowledge Base")
+            print("Step 6 - Creating Knowledge Base")
             knowledge_base, data_source = self.create_knowledge_base(
                 collection_arn,
                 index_name,
@@ -258,7 +265,7 @@ class KnowledgeBasesForAmazonBedrock:
         try:
             self.s3_client.head_bucket(Bucket=bucket_name)
             print(f"Bucket {bucket_name} already exists - retrieving it!")
-        except ClientError as e:
+        except ClientError:
             print(f"Creating bucket {bucket_name}")
             if self.region_name == "us-east-1":
                 self.s3_client.create_bucket(Bucket=bucket_name)
@@ -1053,7 +1060,7 @@ if __name__ == "__main__":
         print(f"Knowledge Base ID: {kb_id}")
         print(f"Data Source ID: {ds_id}")
         kb.upload_directory(
-            f'{current_dir}/{data["kb_files_path"]}', kb.get_data_bucket_name()
+            f"{current_dir}/{data['kb_files_path']}", kb.get_data_bucket_name()
         )
         kb.synchronize_data(kb_id, ds_id)
         smm_client.put_parameter(

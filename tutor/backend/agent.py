@@ -1,17 +1,19 @@
 """
 Bedrock tutor agent - FastAPI version
 """
-from typing import AsyncIterator, Optional, List, Dict, Any
+
+from typing import Any, AsyncIterator, Dict, List, Optional
+
+import tools
 from strands import Agent
 from strands.models import BedrockModel
 from strands.types.content import Message
-import tools
 
 
 def create_tutor_agent(
     conversation_history: List[Dict[str, str]],
     region: str,
-    learning_path_content: Optional[str] = None
+    learning_path_content: Optional[str] = None,
 ) -> Agent:
     """Create a tutor agent with tools and system prompt"""
 
@@ -21,7 +23,7 @@ def create_tutor_agent(
         if msg["role"] in ["user", "assistant"]:
             content = msg["content"]
             if isinstance(content, str):
-                content = [{'text': content}]
+                content = [{"text": content}]
             messages.append(Message(role=msg["role"], content=content))
 
     # Build system prompt
@@ -187,9 +189,7 @@ Available models:
 
     # Create agent
     agent = Agent(
-        model=BedrockModel(
-            model_id='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
-        ),
+        model=BedrockModel(model_id="us.anthropic.claude-sonnet-4-5-20250929-v1:0"),
         messages=messages,
         tools=[
             tools.update_scratchpad,
@@ -199,10 +199,10 @@ Available models:
             tools.update_learning_progress,
             tools.read_scratchpad,
             tools.find_learning_paths,
-            tools.load_learning_path
+            tools.load_learning_path,
         ],
         system_prompt=system_prompt,
-        callback_handler=None
+        callback_handler=None,
     )
 
     return agent
@@ -212,7 +212,7 @@ async def invoke_agent(
     prompt: str,
     conversation_history: List[Dict[str, str]],
     region: str,
-    learning_path_content: Optional[str] = None
+    learning_path_content: Optional[str] = None,
 ) -> AsyncIterator[Dict[str, Any]]:
     """
     Invoke the agent and stream response events.
@@ -231,57 +231,55 @@ async def invoke_agent(
             continue
 
         # Text data
-        if 'data' in event:
-            yield {'type': 'text', 'content': event['data']}
+        if "data" in event:
+            yield {"type": "text", "content": event["data"]}
 
         # Tool use events
-        elif event.get('type') == 'tool_use_stream':
-            tool_use = event.get('current_tool_use', {})
-            tool_id = tool_use.get('toolUseId')
-            tool_name = tool_use.get('name')
-            tool_input = tool_use.get('input', '')
+        elif event.get("type") == "tool_use_stream":
+            tool_use = event.get("current_tool_use", {})
+            tool_id = tool_use.get("toolUseId")
+            tool_name = tool_use.get("name")
+            tool_input = tool_use.get("input", "")
 
             if tool_id:
-                tool_uses[tool_id] = {
-                    'name': tool_name,
-                    'input': tool_input
-                }
+                tool_uses[tool_id] = {"name": tool_name, "input": tool_input}
 
         # Tool use completed
-        elif 'event' in event and 'contentBlockStop' in event['event']:
+        elif "event" in event and "contentBlockStop" in event["event"]:
             for tool_id, tool_data in tool_uses.items():
                 try:
                     import json
-                    parsed_input = json.loads(tool_data['input'])
+
+                    parsed_input = json.loads(tool_data["input"])
                     yield {
-                        'type': 'tool_use',
-                        'name': tool_data['name'],
-                        'input': parsed_input,
-                        'tool_use_id': tool_id
+                        "type": "tool_use",
+                        "name": tool_data["name"],
+                        "input": parsed_input,
+                        "tool_use_id": tool_id,
                     }
                 except (json.JSONDecodeError, KeyError):
                     pass
             tool_uses.clear()
 
         # Tool result events
-        elif 'message' in event:
-            message = event['message']
-            if message.get('role') == 'user':
-                for content_block in message.get('content', []):
-                    if 'toolResult' in content_block:
-                        tool_result = content_block['toolResult']
-                        tool_id = tool_result.get('toolUseId')
-                        status = tool_result.get('status', 'success')
+        elif "message" in event:
+            message = event["message"]
+            if message.get("role") == "user":
+                for content_block in message.get("content", []):
+                    if "toolResult" in content_block:
+                        tool_result = content_block["toolResult"]
+                        tool_id = tool_result.get("toolUseId")
+                        status = tool_result.get("status", "success")
 
-                        result_content = tool_result.get('content', [])
-                        result_text = ''
+                        result_content = tool_result.get("content", [])
+                        result_text = ""
                         for result_block in result_content:
-                            if 'text' in result_block:
-                                result_text += result_block['text']
+                            if "text" in result_block:
+                                result_text += result_block["text"]
 
                         yield {
-                            'type': 'tool_result',
-                            'tool_use_id': tool_id,
-                            'content': result_text,
-                            'status': status
+                            "type": "tool_result",
+                            "tool_use_id": tool_id,
+                            "content": result_text,
+                            "status": status,
                         }

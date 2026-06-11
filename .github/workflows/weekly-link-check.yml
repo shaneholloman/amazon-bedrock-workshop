@@ -1,0 +1,39 @@
+name: Weekly Link Check
+
+on:
+  schedule:
+    - cron: "0 14 * * 3"  # Every Wednesday at 2pm UTC (10am ET)
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  link-check:
+    name: Full Broken Link Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: lycheeverse/lychee-action@v1
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --accept 200,204,301,302
+            --exclude "localhost"
+            --exclude "127.0.0.1"
+            --timeout 30
+            "**/*.md"
+            "**/*.ipynb"
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create or update issue on failure
+        if: failure()
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Weekly Link Check: Broken links detected"
+          content-filepath: ./lychee/out.md
+          labels: bug,automated,links
+          update-existing: true
