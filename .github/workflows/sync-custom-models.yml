@@ -13,6 +13,11 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
       - name: Checkout amazon-bedrock-workshop
         uses: actions/checkout@v6
         with:
@@ -50,6 +55,11 @@ jobs:
 
           [src]: https://github.com/aws-samples/amazon-bedrock-samples/tree/main/custom-models
           EOF
+
+      - name: Run pre-commit hooks on synced files
+        run: |
+          pip install pre-commit
+          pre-commit run --files 03_Model_customization/**
 
       - name: Create PR if changed
         env:
